@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_submatcher" default="compile.module.submatcher">
+  <dirname property="module.submatcher.basedir" file="${ant.file.module_submatcher}"/>
+  
+  <property name="module.jdk.home.submatcher" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.submatcher" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.submatcher" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.submatcher" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="submatcher.output.dir" value="${module.submatcher.basedir}/out/production/Submatcher"/>
+  <property name="submatcher.testoutput.dir" value="${module.submatcher.basedir}/out/test/Submatcher"/>
+  
+  <path id="submatcher.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="submatcher.module.production.classpath">
+    <path refid="${module.jdk.classpath.submatcher}"/>
+  </path>
+  
+  <path id="submatcher.runtime.production.module.classpath">
+    <pathelement location="${submatcher.output.dir}"/>
+  </path>
+  
+  <path id="submatcher.module.classpath">
+    <path refid="${module.jdk.classpath.submatcher}"/>
+    <pathelement location="${submatcher.output.dir}"/>
+  </path>
+  
+  <path id="submatcher.runtime.module.classpath">
+    <pathelement location="${submatcher.testoutput.dir}"/>
+    <pathelement location="${submatcher.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.submatcher">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.submatcher">
+    <patternset refid="excluded.from.module.submatcher"/>
+  </patternset>
+  
+  <path id="submatcher.module.sourcepath">
+    <dirset dir="${module.submatcher.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.submatcher" depends="compile.module.submatcher.production,compile.module.submatcher.tests" description="Compile module Submatcher"/>
+  
+  <target name="compile.module.submatcher.production" depends="register.custom.compilers" description="Compile module Submatcher; production classes">
+    <mkdir dir="${submatcher.output.dir}"/>
+    <javac2 destdir="${submatcher.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.submatcher}/javac">
+      <compilerarg line="${compiler.args.submatcher}"/>
+      <bootclasspath refid="submatcher.module.bootclasspath"/>
+      <classpath refid="submatcher.module.production.classpath"/>
+      <src refid="submatcher.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.submatcher"/>
+    </javac2>
+    
+    <copy todir="${submatcher.output.dir}">
+      <fileset dir="${module.submatcher.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.submatcher.tests" depends="register.custom.compilers,compile.module.submatcher.production" description="compile module Submatcher; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.submatcher" description="cleanup module">
+    <delete dir="${submatcher.output.dir}"/>
+    <delete dir="${submatcher.testoutput.dir}"/>
+  </target>
+</project>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Text?>
+
+<FlowPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="275.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
+    <padding>
+        <Insets topRightBottomLeft="10" />
+    </padding>
+    <Text text="Select the path to your subtitles' folder" textAlignment="CENTER" />
+    <HBox spacing="3">
+        <padding>
+            <Insets bottom="10" />
+        </padding>
+        <TextField fx:id="path_subs" editable="false" prefWidth="400" />
+        <Button fx:id="path_button" mnemonicParsing="false" text="Path" />
+    </HBox>
+    <Button fx:id="start" alignment="CENTER" mnemonicParsing="false" text="Start Renaming!" textAlignment="CENTER">
+        <FlowPane.margin>
+            <Insets bottom="13" />
+        </FlowPane.margin>
+    </Button>
+    <TextArea fx:id="log_area" editable="false" prefHeight="140" prefWidth="200" />
+</FlowPane>

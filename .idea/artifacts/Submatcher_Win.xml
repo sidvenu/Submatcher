@@ -1,0 +1,23 @@
+<component name="ArtifactManager">
+  <artifact type="javafx" name="Submatcher Win">
+    <output-path>$PROJECT_DIR$/out/artifacts/Submatcher_Win</output-path>
+    <properties id="javafx-properties">
+      <options>
+        <option name="appClass" value="subtitle.Main" />
+        <option name="description" value="A tool for you to rename all the subtitles in a TV series to that of their respective videos, so that they could be auto-run by various media players" />
+        <option name="height" value="325" />
+        <option name="htmlPlaceholderId" value="" />
+        <option name="nativeBundle" value="all" />
+        <option name="title" value="Submatcher" />
+        <option name="vendor" value="Siddharth Venu" />
+        <option name="version" value="1.0" />
+        <option name="width" value="500" />
+      </options>
+    </properties>
+    <root id="root">
+      <element id="archive" name="Submatcher.jar">
+        <element id="module-output" name="Submatcher" />
+      </element>
+    </root>
+  </artifact>
+</component>

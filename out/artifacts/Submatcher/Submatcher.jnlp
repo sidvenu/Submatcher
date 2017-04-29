@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="Submatcher.jnlp">
+  <information>
+    <title>Submatcher</title>
+    <vendor>Siddharth Venu</vendor>
+    <description>A tool for you to rename all the subtitles in a TV series to that of their respective videos, so that they could be auto-run by various media players</description>
+    <offline-allowed/>
+  </information>
+  <resources>
+    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="Submatcher.jar" size="52326" download="eager" />
+  </resources>
+  <jfx:javafx-desc  width="500" height="325" main-class="subtitle.Main"  name="Submatcher" />
+  <update check="background"/>
+</jnlp>

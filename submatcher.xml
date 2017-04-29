@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="submatcher" default="all">
+  
+  
+  <property file="submatcher.properties"/>
+  <!-- Uncomment the following property if no tests compilation is needed -->
+  <!-- 
+  <property name="skip.tests" value="true"/>
+   -->
+  
+  <!-- Compiler options -->
+  
+  <property name="compiler.debug" value="on"/>
+  <property name="compiler.generate.no.warnings" value="off"/>
+  <property name="compiler.args" value=""/>
+  <property name="compiler.max.memory" value="700m"/>
+  <patternset id="ignored.files">
+    <exclude name="**/*.hprof/**"/>
+    <exclude name="**/*.pyc/**"/>
+    <exclude name="**/*.pyo/**"/>
+    <exclude name="**/*.rbc/**"/>
+    <exclude name="**/*.yarb/**"/>
+    <exclude name="**/*~/**"/>
+    <exclude name="**/.DS_Store/**"/>
+    <exclude name="**/.git/**"/>
+    <exclude name="**/.hg/**"/>
+    <exclude name="**/.svn/**"/>
+    <exclude name="**/CVS/**"/>
+    <exclude name="**/__pycache__/**"/>
+    <exclude name="**/_svn/**"/>
+    <exclude name="**/vssver.scc/**"/>
+    <exclude name="**/vssver2.scc/**"/>
+  </patternset>
+  <patternset id="library.patterns">
+    <include name="*.war"/>
+    <include name="*.swc"/>
+    <include name="*.zip"/>
+    <include name="*.ear"/>
+    <include name="*.egg"/>
+    <include name="*.ane"/>
+    <include name="*.jar"/>
+  </patternset>
+  <patternset id="compiler.resources">
+    <exclude name="**/?*.java"/>
+    <exclude name="**/?*.form"/>
+    <exclude name="**/?*.class"/>
+    <exclude name="**/?*.groovy"/>
+    <exclude name="**/?*.scala"/>
+    <exclude name="**/?*.flex"/>
+    <exclude name="**/?*.kt"/>
+    <exclude name="**/?*.clj"/>
+  </patternset>
+  
+  <!-- JDK definitions -->
+  
+  <property name="jdk.bin.1.8" value="${jdk.home.1.8}/bin"/>
+  <path id="jdk.classpath.1.8">
+    <fileset dir="${jdk.home.1.8}">
+      <include name="jre/lib/charsets.jar"/>
+      <include name="jre/lib/deploy.jar"/>
+      <include name="jre/lib/ext/access-bridge-64.jar"/>
+      <include name="jre/lib/ext/cldrdata.jar"/>
+      <include name="jre/lib/ext/dnsns.jar"/>
+      <include name="jre/lib/ext/jaccess.jar"/>
+      <include name="jre/lib/ext/jfxrt.jar"/>
+      <include name="jre/lib/ext/localedata.jar"/>
+      <include name="jre/lib/ext/nashorn.jar"/>
+      <include name="jre/lib/ext/sunec.jar"/>
+      <include name="jre/lib/ext/sunjce_provider.jar"/>
+      <include name="jre/lib/ext/sunmscapi.jar"/>
+      <include name="jre/lib/ext/sunpkcs11.jar"/>
+      <include name="jre/lib/ext/zipfs.jar"/>
+      <include name="jre/lib/javaws.jar"/>
+      <include name="jre/lib/jce.jar"/>
+      <include name="jre/lib/jfr.jar"/>
+      <include name="jre/lib/jfxswt.jar"/>
+      <include name="jre/lib/jsse.jar"/>
+      <include name="jre/lib/management-agent.jar"/>
+      <include name="jre/lib/plugin.jar"/>
+      <include name="jre/lib/resources.jar"/>
+      <include name="jre/lib/rt.jar"/>
+    </fileset>
+  </path>
+  
+  <property name="project.jdk.home" value="${jdk.home.1.8}"/>
+  <property name="project.jdk.bin" value="${jdk.bin.1.8}"/>
+  <property name="project.jdk.classpath" value="jdk.classpath.1.8"/>
+  <!-- Register Custom Compiler Taskdefs -->
+  <property name="javac2.home" value="${idea.home}/lib"/>
+  <path id="javac2.classpath">
+    <pathelement location="${javac2.home}/javac2.jar"/>
+    <pathelement location="${javac2.home}/jdom.jar"/>
+    <pathelement location="${javac2.home}/asm-all.jar"/>
+    <pathelement location="${javac2.home}/jgoodies-forms.jar"/>
+  </path>
+  <target name="register.custom.compilers">
+    <taskdef name="javac2" classname="com.intellij.ant.Javac2" classpathref="javac2.classpath"/>
+    <taskdef name="instrumentIdeaExtensions" classname="com.intellij.ant.InstrumentIdeaExtensions" classpathref="javac2.classpath"/>
+  </target>
+  
+  <!-- Modules -->
+  
+  <import file="${basedir}/module_submatcher.xml"/>
+  
+  <target name="init" description="Build initialization">
+    <!-- Perform any build initialization in this target -->
+  </target>
+  
+  <target name="clean" depends="clean.module.submatcher, clean.artifact.submatcher, clean.artifact.submatcher_windows" description="cleanup all"/>
+  
+  <target name="build.modules" depends="init, clean, compile.module.submatcher" description="build all modules"/>
+  
+  <target name="init.artifacts">
+    <property name="artifacts.temp.dir" value="${basedir}/__artifacts_temp"/>
+    <property name="artifact.output.submatcher" value="${basedir}/out/artifacts/Submatcher"/>
+    <property name="artifact.output.submatcher_windows" value="${basedir}/out/artifacts/Submatcher_Windows"/>
+    <mkdir dir="${artifacts.temp.dir}"/>
+    <property name="artifact.temp.output.Submatcher" value="${artifacts.temp.dir}/Submatcher.jar"/>
+    <property name="artifact.temp.output.Submatcher2" value="${artifacts.temp.dir}/1/Submatcher.jar"/>
+    <mkdir dir="${artifacts.temp.dir}/1"/>
+    <taskdef resource="com/sun/javafx/tools/ant/antlib.xml" uri="javafx:com.sun.javafx.tools.ant" classpath="${jdk.home.1.8}/lib/ant-javafx.jar"/>
+  </target>
+  
+  <target name="clean.artifact.submatcher" description="clean Submatcher artifact output">
+    <delete dir="${artifact.output.submatcher}"/>
+  </target>
+  
+  <target name="clean.artifact.submatcher_windows" description="clean Submatcher Windows artifact output">
+    <delete dir="${artifact.output.submatcher_windows}"/>
+  </target>
+  
+  <target name="artifact.submatcher" depends="init.artifacts, compile.module.submatcher" description="Build &#39;Submatcher&#39; artifact" xmlns:fx="javafx:com.sun.javafx.tools.ant">
+    <mkdir dir="${artifact.output.submatcher}"/>
+    <copy todir="${artifact.temp.output.Submatcher}">
+      <fileset dir="${submatcher.output.dir}"/>
+    </copy>
+    <fx:fileset id="all_but_Submatcher" dir="${artifact.temp.output.Submatcher}" includes="**/*.jar">
+      <exclude name="Submatcher.jar"/>
+    </fx:fileset>
+    <fx:fileset id="all_Submatcher" dir="${artifact.temp.output.Submatcher}" includes="**/*.jar"/>
+    <fx:application id="Submatcher_id" name="Submatcher" mainClass="subtitle.Main" version="1.0"/>
+    <fx:jar destfile="${artifact.temp.output.Submatcher}/Submatcher.jar">
+      <fx:application refid="Submatcher_id"/>
+      <fileset dir="${artifact.temp.output.Submatcher}" excludes="**/*.jar"/>
+      <fx:resources>
+        <fx:fileset refid="all_but_Submatcher"/>
+      </fx:resources>
+      <manifest>
+        <attribute name="Implementation-Title" value="Submatcher"/>
+        <attribute name="Implementation-Version" value="1.0"/>
+        <attribute name="Implementation-Vendor" value="Siddharth Venu"/>
+      </manifest>
+    </fx:jar>
+    <fx:deploy width="500" height="275" updatemode="background" outdir="${artifact.temp.output.Submatcher}/deploy" outfile="Submatcher">
+      <fx:application refid="Submatcher_id"/>
+      <fx:info title="Submatcher" vendor="Siddharth Venu" description="A tool for you to rename all the subtitles in a TV series to that of their respective videos, so that they could be auto-run by various media players"/>
+      <fx:resources>
+        <fx:fileset refid="all_Submatcher"/>
+      </fx:resources>
+    </fx:deploy>
+    <copy todir="${artifact.output.submatcher}">
+      <fileset dir="${artifact.temp.output.Submatcher}/deploy"/>
+    </copy>
+    <delete includeemptydirs="true">
+      <fileset dir="${artifact.temp.output.Submatcher}"/>
+    </delete>
+  </target>
+  
+  <target name="artifact.submatcher_windows" depends="init.artifacts, compile.module.submatcher" description="Build &#39;Submatcher Windows&#39; artifact" xmlns:fx="javafx:com.sun.javafx.tools.ant">
+    <mkdir dir="${artifact.output.submatcher_windows}"/>
+    <copy todir="${artifact.temp.output.Submatcher2}">
+      <fileset dir="${submatcher.output.dir}"/>
+    </copy>
+    <fx:fileset id="all_but_Submatcher" dir="${artifact.temp.output.Submatcher2}" includes="**/*.jar">
+      <exclude name="Submatcher.jar"/>
+    </fx:fileset>
+    <fx:fileset id="all_Submatcher" dir="${artifact.temp.output.Submatcher2}" includes="**/*.jar"/>
+    <fx:application id="Submatcher_id" name="Submatcher Windows" mainClass="subtitle.Main" version="1.0"/>
+    <fx:jar destfile="${artifact.temp.output.Submatcher2}/Submatcher.jar">
+      <fx:application refid="Submatcher_id"/>
+      <fileset dir="${artifact.temp.output.Submatcher2}" excludes="**/*.jar"/>
+      <fx:resources>
+        <fx:fileset refid="all_but_Submatcher"/>
+      </fx:resources>
+      <manifest>
+        <attribute name="Implementation-Title" value="Submatcher"/>
+        <attribute name="Implementation-Version" value="1.0"/>
+        <attribute name="Implementation-Vendor" value="Siddharth Venu"/>
+      </manifest>
+    </fx:jar>
+    <fx:deploy width="500" height="275" updatemode="background" outdir="${artifact.temp.output.Submatcher2}/deploy" outfile="Submatcher" nativeBundles="exe">
+      <fx:application refid="Submatcher_id"/>
+      <fx:info title="Submatcher" vendor="Siddharth Venu" description="A tool for you to rename all the subtitles in a TV series to that of their respective videos, so that they could be auto-run by various media players"/>
+      <fx:resources>
+        <fx:fileset refid="all_Submatcher"/>
+      </fx:resources>
+    </fx:deploy>
+    <copy todir="${artifact.output.submatcher_windows}">
+      <fileset dir="${artifact.temp.output.Submatcher2}/deploy"/>
+    </copy>
+    <delete includeemptydirs="true">
+      <fileset dir="${artifact.temp.output.Submatcher2}"/>
+    </delete>
+  </target>
+  
+  <target name="build.all.artifacts" depends="artifact.submatcher, artifact.submatcher_windows" description="Build all artifacts">
+    
+    <!-- Delete temporary files -->
+    <delete dir="${artifacts.temp.dir}"/>
+  </target>
+  
+  <target name="all" depends="build.modules, build.all.artifacts" description="build all"/>
+</project>
